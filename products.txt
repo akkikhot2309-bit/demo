@@ -1,0 +1,13 @@
+1
+1
+Liquidsoap
+5
+1.5
+0.3
+3
+chemical A
+2.5
+chemical B
+1
+perfume
+0.2
