@@ -1,6 +1,6 @@
 #include "Product.h"
 
-// Default constructor - initialize all fields to zero or empty
+// default constructor 
 Product::Product() {
     id = 0;
     name = "";

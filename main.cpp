@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ProcessPlanningSystem.h"
 
-using namespace std;
+
 
 int main() {
     ProcessPlanningSystem system;
@@ -9,26 +9,36 @@ int main() {
 
 
     // Auto-load saved data when program starts
-    cout << "Loading saved data...\n";
+    std::cout << "Loading saved data...\n";
     system.loadData();
 
     do {
-        cout << "\n====================================\n";
-        cout << "   PROCESS PLANNING SYSTEM\n";
-        cout << "   Chemical Plant Management\n";
-        cout << "====================================\n";
-        cout << "1. Add Product\n";
-        cout << "2. Add Production Schedule\n";
-        cout << "3. Create Forecast Report\n";
-        cout << "4. Create Ingredients Required Report\n";
-        cout << "5. Save Data\n";
-        cout << "6. Load Data\n";
-        cout << "7. Show All Products\n";
-        cout << "8. Show All Schedules\n";
-        cout << "0. Exit\n";
-        cout << "------------------------------------\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
+
+
+        std::cout << "\n====================================\n";
+
+       std::cout << "   PROCESS PLANNING SYSTEM\n";
+       std::cout << "   Chemical Plant Management\n";
+
+       std::cout << "\n\n\n";
+
+
+
+       std::cout << "1. Add Product\n";
+       std::cout << "2. Add Production Schedule\n";
+         std::cout << "3. Create Forecast Report\n";
+      std::cout << "4. Create Ingredients Required Report\n";
+      std::cout << "5. Save Data\n";
+      std::cout << "6. Load Data\n";
+      std::cout << "7. Show All Products\n";
+      std::cout << "8. Show All Schedules\n";
+      std::cout << "0. Exit\n";
+      std::cout << "------------------------------------\n";
+      std::cout << "Enter your choice: ";
+      std::cin >> choice;
+
+
+
 
         switch (choice) {
         case 1:
@@ -58,10 +68,10 @@ int main() {
         case 0:
             // Auto-save before exit
             system.saveData();
-            cout << "Data saved. Goodbye!\n";
+            std::cout << "Data saved. Goodbye!\n";
             break;
         default:
-            cout << "Invalid choice. Please enter 0-8.\n";
+            std::cout << "Invalid choice. Please enter 0-8.\n";
         }
 
     } while (choice != 0);

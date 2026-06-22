@@ -1,13 +1,17 @@
 #include "Ingredient.h"
 
-// Default constructor
+// default constructor
 Ingredient::Ingredient() {
     name = "";
     quantityPerUnit = 0;
 }
 
-// Parameterized constructor
+// parameterized constructor
 Ingredient::Ingredient(std::string name, double quantityPerUnit) {
+
+
+    //this 
     this->name = name;
     this->quantityPerUnit = quantityPerUnit;
+
 }

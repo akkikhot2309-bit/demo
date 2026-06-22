@@ -4,13 +4,14 @@
 #include <iomanip>
 #include <map>
 
-using namespace std;
+ 
 
-// -------------------------------------------------------
-// HELPER: Find product by ID
-// Returns pointer to product if found, nullptr if not found
-// -------------------------------------------------------
+//helper find product by id
+// return null if product not found
+
 Product* ProcessPlanningSystem::findProductById(int id) {
+
+
     for (auto& product : products) {
         if (product.id == id) {
             return &product;
@@ -19,261 +20,330 @@ Product* ProcessPlanningSystem::findProductById(int id) {
     return nullptr;
 }
 
-// -------------------------------------------------------
-// OPTION 1: Add Product
-// -------------------------------------------------------
+
+// add product
 void ProcessPlanningSystem::addProduct() {
     Product p;
     int ingredientCount;
 
-    cout << "\n--- Add New Product ---\n";
+    std::cout << "\n";
 
-    cout << "Enter Product ID: ";
-    cin >> p.id;
-    cin.ignore();
+        
+      std::cout << " Add New Product ";
+
+    std::cout << "\n";
+
+
+    std::cout << "Enter Product ID: ";
+     std::cin >> p.id;
+
+    std::cin.ignore();
 
     // Check if ID already exists
     if (findProductById(p.id) != nullptr) {
-        cout << "Product ID already exists. Please use a different ID.\n";
+
+        std::cout << "Product ID already exists. Please use a different ID.\n";
         return;
+
     }
 
-    cout << "Enter Product Name: ";
-    getline(cin, p.name);
+    std::cout << "Enter Product Name: ";
+    getline(std::cin, p.name);
 
-    cout << "Enter Water required per unit (liters): ";
-    cin >> p.waterPerUnit;
+    std::cout << "Enter Water required per unit (liters): ";
+    std::cin >> p.waterPerUnit;
 
-    cout << "Enter Electricity required per unit (kWh): ";
-    cin >> p.electricityPerUnit;
+    std::cout << "Enter Electricity required per unit (kWh): ";
+    std::cin >> p.electricityPerUnit;
 
-    cout << "Enter Machine Time required per unit (hours): ";
-    cin >> p.machineTimePerUnit;
+    std::cout << "Enter Machine Time required per unit (hours): ";
+    std::cin >> p.machineTimePerUnit;
 
-    cout << "Enter number of ingredients: ";
-    cin >> ingredientCount;
-    cin.ignore();
+    std::cout << "Enter number of ingredients: ";
+    std::cin >> ingredientCount;
+    std::cin.ignore();
 
     for (int i = 0; i < ingredientCount; i++) {
-        string ingName;
+
+        std::string ingName;
         double qty;
 
-        cout << "Enter ingredient " << i + 1 << " name: ";
-        getline(cin, ingName);
+        std::cout << "Enter ingredient " << i + 1 << " name: ";
+        getline(std::cin, ingName);
 
-        cout << "Enter quantity required per unit: ";
-        cin >> qty;
-        cin.ignore();
+        std::cout << "Enter quantity required per unit: ";
+        std::cin >> qty;
+        std::cin.ignore();
 
         p.ingredients.push_back(Ingredient(ingName, qty));
+
+
+
     }
 
     products.push_back(p);
-    cout << "Product added successfully!\n";
+    std::cout << "Product added successfully!\n";
+
+
+
 }
 
-// -------------------------------------------------------
-// OPTION 2: Add Production Schedule
-// -------------------------------------------------------
+// addSchedule
 void ProcessPlanningSystem::addProductionSchedule() {
     ProductionSchedule s;
 
-    cout << "\n--- Add Production Schedule ---\n";
+    std::cout << "\n--- Add Production Schedule ---\n";
 
-    cout << "Enter Product ID: ";
-    cin >> s.productId;
+    std::cout << "Enter Product ID: ";
+    std::cin >> s.productId;
 
     // Check if product exists before adding schedule
     Product* product = findProductById(s.productId);
+
     if (product == nullptr) {
-        cout << "Product ID not found. Please add the product first.\n";
+        std::cout << "Product ID not found. Please add the product first.\n";
         return;
     }
 
-    cout << "Enter Production Date (YYYY-MM-DD): ";
-    cin >> s.date;
+    std::cout << "Enter Production Date (YYYY-MM-DD): ";
+    std::cin >> s.date;
 
-    cout << "Enter Quantity to produce: ";
-    cin >> s.quantity;
+    std::cout << "Enter Quantity to produce: ";
+    std::cin >> s.quantity;
 
     schedules.push_back(s);
-    cout << "Production schedule added successfully!\n";
+
+
+
+    std::cout << "Production schedule added successfully!\n";
+
+
 }
 
-// -------------------------------------------------------
-// OPTION 3: Forecast Report
-// Shows resource usage for all scheduled production
-// -------------------------------------------------------
+//createForcast
 void ProcessPlanningSystem::createForecastReport() {
+
+
     if (schedules.empty()) {
-        cout << "\nNo production schedules available.\n";
+       std::cout << "\nNo production schedules available.\n";
         return;
     }
 
     double totalWater = 0;
     double totalElectricity = 0;
     double totalMachineTime = 0;
+    std::cout << " Your Report is here \n";
 
-    cout << "\n========== FORECAST REPORT ==========\n";
-    cout << left
-        << setw(14) << "Date"
-        << setw(20) << "Product"
-        << setw(10) << "Qty"
-        << setw(12) << "Water(L)"
-        << setw(16) << "Electricity(kWh)"
-        << setw(16) << "MachTime(hrs)"
-        << endl;
-    cout << string(88, '-') << endl;
+    std::cout << "\n========== FORECAST REPORT ==========\n";
+    std::cout << std::left
+        << std::setw(14) << "Date"
+        << std::setw(20) << "Product"
+        << std::setw(10) << "Qty"
+        << std::setw(12) << "Water(L)"
+        << std::setw(16) << "Electricity(kWh)"
+        << std::setw(16) << "MachTime(hrs)"
+        << std::endl;
+    std::cout << std::string(88, '-') << std::endl;
 
     for (const auto& s : schedules) {
+
+
         Product* product = findProductById(s.productId);
+
+
+        //product exists
         if (product != nullptr) {
+
+
             double water = product->waterPerUnit * s.quantity;
             double electricity = product->electricityPerUnit * s.quantity;
             double machineTime = product->machineTimePerUnit * s.quantity;
+
+
 
             totalWater += water;
             totalElectricity += electricity;
             totalMachineTime += machineTime;
 
-            cout << left
-                << setw(14) << s.date
-                << setw(20) << product->name
-                << setw(10) << s.quantity
-                << setw(12) << water
-                << setw(16) << electricity
-                << setw(16) << machineTime
-                << endl;
+            std::cout << std::left
+                << std::setw(14) << s.date
+                << std::setw(20) << product->name
+                << std::setw(10) << s.quantity
+                << std::setw(12) << water
+                << std::setw(16) << electricity
+                << std::setw(16) << machineTime
+                << std::endl;
         }
     }
 
-    cout << string(88, '-') << endl;
-    cout << "TOTAL Water Required      : " << totalWater << " L\n";
-    cout << "TOTAL Electricity Required: " << totalElectricity << " kWh\n";
-    cout << "TOTAL Machine Time        : " << totalMachineTime << " hrs\n";
-    cout << "=====================================\n";
+    std::cout << std::string(88, '-') << std::endl;
+    std::cout << "TOTAL Water Required      : " << totalWater << " L\n";
+    std::cout << "TOTAL Electricity Required: " << totalElectricity << " kWh\n";
+    std::cout << "TOTAL Machine Time        : " << totalMachineTime << " hrs\n";
+
+
+    std::cout << "=====================================\n";
+
+
+
 }
 
-// -------------------------------------------------------
-// OPTION 4: Ingredients Required Report (by date range)
-// -------------------------------------------------------
+//createIngrediant
 void ProcessPlanningSystem::createIngredientReportByDateRange() {
+
     if (schedules.empty()) {
-        cout << "\nNo production schedules available.\n";
+
+        std::cout << "\nNo production schedules available.\n";
+
         return;
+
     }
 
-    string startDate, endDate;
-    map<string, double> ingredientTotals; // ingredient name -> total quantity
+    //take input
+    std::string startDate, endDate;
 
-    cout << "\n--- Ingredients Required Report ---\n";
-    cout << "Enter Start Date (YYYY-MM-DD): ";
-    cin >> startDate;
-    cout << "Enter End Date   (YYYY-MM-DD): ";
-    cin >> endDate;
+    std::map<std::string, double> ingredientTotals; // ingredient name -> total quantity
+
+    std::cout << "\n--- Ingredients Required Report ---\n";
+    std::cout << "Enter Start Date (YYYY-MM-DD): ";
+    std::cin >> startDate;
+    std::cout << "Enter End Date   (YYYY-MM-DD): ";
+    std::cin >> endDate;
 
     // Loop through all schedules and check if date is within range
     for (const auto& s : schedules) {
+
         if (s.date >= startDate && s.date <= endDate) {
+
+
             Product* product = findProductById(s.productId);
+
+
+            //found product
             if (product != nullptr) {
-                // For each ingredient, multiply per-unit qty by production quantity
+                // For each ingredient  product->ingredients , multiply per-unit qty by production quantity
+
                 for (const auto& ing : product->ingredients) {
                     ingredientTotals[ing.name] += ing.quantityPerUnit * s.quantity;
                 }
             }
+
+
         }
     }
 
-    cout << "\n===== INGREDIENTS REQUIRED REPORT =====\n";
-    cout << "Date Range: " << startDate << " to " << endDate << "\n";
-    cout << string(40, '-') << endl;
+    std::cout << "\n===== INGREDIENTS REQUIRED REPORT =====\n";
+    std::cout << "Date Range: " << startDate << " to " << endDate << "\n";
+    std::cout << std::string(40, '-') << std::endl;
 
+
+    //map is not empty
     if (ingredientTotals.empty()) {
-        cout << "No schedules found in this date range.\n";
+
+        std::cout << "No schedules found in this date range.\n";
         return;
+
     }
 
     for (const auto& item : ingredientTotals) {
-        cout << left << setw(20) << item.first << ": " << item.second << endl;
+
+        std::cout << std::left << std::setw(20) << item.first << ": " << item.second << std::endl;
+
     }
 
-    cout << "========================================\n";
+    std::cout << "========================================\n";
+
+
 }
 
-// -------------------------------------------------------
-// OPTION 5: Save Data to Files
-// -------------------------------------------------------
+// save to files from vectors
 void ProcessPlanningSystem::saveData() {
-    ofstream productFile("products.txt");
-    ofstream scheduleFile("schedules.txt");
 
+
+    std::ofstream productFile("products.txt");
+    std::ofstream scheduleFile("schedules.txt");
+
+
+    //error in opening the file
     if (!productFile || !scheduleFile) {
-        cout << "Error: Could not open file for saving.\n";
+        std::cout << "Error: Could not open file for saving.\n";
         return;
     }
 
     // Save all products
-    productFile << products.size() << endl;
+    //array size products.size()
+    productFile << products.size() << std::endl;
+
+
     for (const auto& p : products) {
-        productFile << p.id << endl;
-        productFile << p.name << endl;
-        productFile << p.waterPerUnit << endl;
-        productFile << p.electricityPerUnit << endl;
-        productFile << p.machineTimePerUnit << endl;
-        productFile << p.ingredients.size() << endl;
+        productFile << p.id << std::endl;
+        productFile << p.name << std::endl;
+        productFile << p.waterPerUnit << std::endl;
+        productFile << p.electricityPerUnit << std::endl;
+        productFile << p.machineTimePerUnit << std::endl;
+        productFile << p.ingredients.size() << std::endl;
 
         for (const auto& ing : p.ingredients) {
-            productFile << ing.name << endl;
-            productFile << ing.quantityPerUnit << endl;
+            productFile << ing.name << std::endl;
+            productFile << ing.quantityPerUnit << std::endl;
         }
     }
 
     // Save all schedules
-    scheduleFile << schedules.size() << endl;
+    scheduleFile << schedules.size() << std::endl;
+
     for (const auto& s : schedules) {
-        scheduleFile << s.productId << endl;
-        scheduleFile << s.date << endl;
-        scheduleFile << s.quantity << endl;
+
+        scheduleFile << s.productId << std::endl;
+        scheduleFile << s.date << std::endl;
+        scheduleFile << s.quantity << std::endl;
+
+
     }
 
-    cout << "Data saved to products.txt and schedules.txt\n";
+    std::cout << "Data saved to products.txt and schedules.txt\n";
 }
 
-// -------------------------------------------------------
-// OPTION 6: Load Data from Files
-// -------------------------------------------------------
+// load to vectors  from file
 void ProcessPlanningSystem::loadData() {
-    ifstream productFile("products.txt");
-    ifstream scheduleFile("schedules.txt");
+
+    std::ifstream productFile("products.txt");
+    std::ifstream scheduleFile("schedules.txt");
+
 
     products.clear();
     schedules.clear();
 
     // Load products
     if (productFile) {
+
         int productCount;
         productFile >> productCount;
         productFile.ignore();
 
         for (int i = 0; i < productCount; i++) {
+
             Product p;
             int ingredientCount;
 
             productFile >> p.id;
             productFile.ignore();
-            getline(productFile, p.name);
+
+            std::getline(productFile, p.name);
+
             productFile >> p.waterPerUnit;
             productFile >> p.electricityPerUnit;
             productFile >> p.machineTimePerUnit;
             productFile >> ingredientCount;
+
             productFile.ignore();
 
             for (int j = 0; j < ingredientCount; j++) {
-                string ingName;
+                std::string ingName;
                 double qty;
 
-                getline(productFile, ingName);
+                std::getline(productFile, ingName);
+
                 productFile >> qty;
                 productFile.ignore();
 
@@ -282,14 +352,20 @@ void ProcessPlanningSystem::loadData() {
 
             products.push_back(p);
         }
-        cout << "Products loaded from file.\n";
+
+
+        std::cout << "Products loaded from file.\n";
     }
+
+
     else {
-        cout << "No saved product data found.\n";
+        std::cout << "No saved product data found.\n";
     }
 
     // Load schedules
     if (scheduleFile) {
+
+
         int scheduleCount;
         scheduleFile >> scheduleCount;
         scheduleFile.ignore();
@@ -299,60 +375,91 @@ void ProcessPlanningSystem::loadData() {
 
             scheduleFile >> s.productId;
             scheduleFile.ignore();
-            getline(scheduleFile, s.date);
+            std::getline(scheduleFile, s.date);
             scheduleFile >> s.quantity;
             scheduleFile.ignore();
 
             schedules.push_back(s);
+
         }
-        cout << "Schedules loaded from file.\n";
+
+
+        std::cout << "Schedules loaded from file.\n";
     }
+
+
     else {
-        cout << "No saved schedule data found.\n";
+
+        std::cout << "No saved schedule data found.\n";
+
     }
+
+
 }
 
-// -------------------------------------------------------
-// EXTRA: Show all products
-// -------------------------------------------------------
+// show all products
 void ProcessPlanningSystem::showProducts() {
+
     if (products.empty()) {
-        cout << "\nNo products added yet.\n";
+        std::cout << "\nNo products added yet.\n";
         return;
     }
 
-    cout << "\n========== PRODUCT LIST ==========\n";
+    std::cout << "\n========== PRODUCT LIST ==========\n";
+
+
     for (const auto& p : products) {
-        cout << "Product ID    : " << p.id << endl;
-        cout << "Product Name  : " << p.name << endl;
-        cout << "Water/unit    : " << p.waterPerUnit << " L\n";
-        cout << "Electricity/unit: " << p.electricityPerUnit << " kWh\n";
-        cout << "Machine Time/unit: " << p.machineTimePerUnit << " hrs\n";
-        cout << "Ingredients:\n";
+
+
+        std::cout << "Product ID    : " << p.id << std::endl;
+        std::cout << "Product Name  : " << p.name << std::endl;
+        std::cout << "Water/unit    : " << p.waterPerUnit << " L\n";
+        std::cout << "Electricity/unit: " << p.electricityPerUnit << " kWh\n";
+        std::cout << "Machine Time/unit: " << p.machineTimePerUnit << " hrs\n";
+        std::cout << "Ingredients:\n";
+
+
         for (const auto& ing : p.ingredients) {
-            cout << "   - " << ing.name << " : " << ing.quantityPerUnit << " per unit\n";
+
+
+            std::cout << "   - " << ing.name << " : " << ing.quantityPerUnit << " per unit\n";
+
+
         }
-        cout << string(34, '-') << endl;
+
+        std::cout << std::string(34, '-') << std::endl;
+
+
     }
 }
 
-// -------------------------------------------------------
-// EXTRA: Show all schedules
-// -------------------------------------------------------
+// show all the schedules
 void ProcessPlanningSystem::showSchedules() {
+
+
     if (schedules.empty()) {
-        cout << "\nNo schedules added yet.\n";
+        std::cout << "\nNo schedules added yet.\n";
         return;
+
+
     }
 
-    cout << "\n========== PRODUCTION SCHEDULES ==========\n";
+    std::cout << "\n========== PRODUCTION SCHEDULES ==========\n";
+
     for (const auto& s : schedules) {
+
         Product* product = findProductById(s.productId);
-        cout << "Date: " << s.date
+
+        std::cout << "Date: " << s.date
             << " | Product ID: " << s.productId
             << " | Product: " << (product ? product->name : "Unknown")
             << " | Quantity: " << s.quantity
-            << endl;
+            << std::endl;
+
+
     }
-    cout << "==========================================\n";
+
+    std::cout << "==========================================\n";
+
+
 }

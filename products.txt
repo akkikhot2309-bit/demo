@@ -1,4 +1,4 @@
-1
+2
 1
 Liquidsoap
 5
@@ -11,3 +11,13 @@ chemical B
 1
 perfume
 0.2
+22
+dettol
+2
+2
+0.4
+2
+perfume
+5
+detergant
+10
