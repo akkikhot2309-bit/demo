@@ -123,17 +123,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FileHandler.cpp" />
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProcessPlanningSystem.cpp" />
     <ClCompile Include="Product.cpp" />
     <ClCompile Include="ProductionSchedule.cpp" />
+    <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileHandler.h" />
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="ProcessPlanningSystem.h" />
     <ClInclude Include="Product.h" />
     <ClInclude Include="ProductionSchedule.h" />
+    <ClInclude Include="Validator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

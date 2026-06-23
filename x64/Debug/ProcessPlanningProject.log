@@ -1,7 +1,2 @@
-﻿  Ingredient.cpp
-  ProcessPlanningSystem.cpp
-  Product.cpp
-  ProductionSchedule.cpp
-  main.cpp
-  Generating Code...
+﻿  main.cpp
   ProcessPlanningProject.vcxproj -> E:\VisualStudio\ProcessPlanningProject\x64\Debug\ProcessPlanningProject.exe

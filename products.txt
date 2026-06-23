@@ -1,4 +1,4 @@
-2
+3
 1
 Liquidsoap
 5
@@ -20,4 +20,14 @@ dettol
 perfume
 5
 detergant
+10
+24
+Good-day
+0.5
+0.3
+0.5
+2
+wheat
+5
+flavour
 10

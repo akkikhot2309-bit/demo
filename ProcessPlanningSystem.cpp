@@ -1,4 +1,6 @@
 #include "ProcessPlanningSystem.h"
+#include "FileHandler.h"
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -13,6 +15,7 @@ Product* ProcessPlanningSystem::findProductById(int id) {
 
 
     for (auto& product : products) {
+
         if (product.id == id) {
             return &product;
         }
@@ -34,8 +37,7 @@ void ProcessPlanningSystem::addProduct() {
     std::cout << "\n";
 
 
-    std::cout << "Enter Product ID: ";
-     std::cin >> p.id;
+    p.id = Validator::getValidInt("Enter Product ID (positive number): ");
 
     std::cin.ignore();
 
@@ -47,32 +49,38 @@ void ProcessPlanningSystem::addProduct() {
 
     }
 
-    std::cout << "Enter Product Name: ";
-    getline(std::cin, p.name);
+    p.name = Validator::getValidString("Enter Product Name: ");
 
-    std::cout << "Enter Water required per unit (liters): ";
-    std::cin >> p.waterPerUnit;
+    p.waterPerUnit = Validator::getValidDouble("Enter Water required per unit (liters): ");
 
-    std::cout << "Enter Electricity required per unit (kWh): ";
-    std::cin >> p.electricityPerUnit;
+    p.electricityPerUnit = Validator::getValidDouble("Enter Electricity required per unit (kWh): ");
 
-    std::cout << "Enter Machine Time required per unit (hours): ";
-    std::cin >> p.machineTimePerUnit;
+    p.machineTimePerUnit = Validator::getValidDouble("Enter Machine Time required per unit (hours): ");
 
-    std::cout << "Enter number of ingredients: ";
-    std::cin >> ingredientCount;
-    std::cin.ignore();
+
+    while (true) {
+
+        ingredientCount = Validator::getValidInt("Enter number of ingredients (at least 1): ");
+
+        if (ingredientCount < 1) {
+            std::cout << "  Must have at least 1 ingredient.\n";
+        }
+
+        else {
+            break;
+        }
+    }
 
     for (int i = 0; i < ingredientCount; i++) {
 
-        std::string ingName;
-        double qty;
+        
+        std::cout << "\nIngredient " << i + 1 << ":\n";
 
-        std::cout << "Enter ingredient " << i + 1 << " name: ";
-        getline(std::cin, ingName);
+        std::string ingName = Validator::getValidString("  Enter ingredient name: ");
 
-        std::cout << "Enter quantity required per unit: ";
-        std::cin >> qty;
+        double qty = Validator::getValidDouble("  Enter quantity per unit (> 0): ");
+
+
         std::cin.ignore();
 
         p.ingredients.push_back(Ingredient(ingName, qty));
@@ -94,8 +102,7 @@ void ProcessPlanningSystem::addProductionSchedule() {
 
     std::cout << "\n--- Add Production Schedule ---\n";
 
-    std::cout << "Enter Product ID: ";
-    std::cin >> s.productId;
+    s.productId = Validator::getValidInt("Enter Product ID: ");
 
     // Check if product exists before adding schedule
     Product* product = findProductById(s.productId);
@@ -105,11 +112,9 @@ void ProcessPlanningSystem::addProductionSchedule() {
         return;
     }
 
-    std::cout << "Enter Production Date (YYYY-MM-DD): ";
-    std::cin >> s.date;
+    s.date = Validator::getValidDate("Enter Production Date (YYYY-MM-DD): ");
 
-    std::cout << "Enter Quantity to produce: ";
-    std::cin >> s.quantity;
+    s.quantity = Validator::getValidInt("Enter Quantity to produce: ");
 
     schedules.push_back(s);
 
@@ -205,15 +210,15 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
     std::map<std::string, double> ingredientTotals; // ingredient name -> total quantity
 
     std::cout << "\n--- Ingredients Required Report ---\n";
-    std::cout << "Enter Start Date (YYYY-MM-DD): ";
-    std::cin >> startDate;
-    std::cout << "Enter End Date   (YYYY-MM-DD): ";
-    std::cin >> endDate;
+
+    startDate = Validator::getValidDate("Enter Start Date (YYYY-MM-DD): ");
+
+    endDate = Validator::getValidDate("Enter End Date   (YYYY-MM-DD): ");
 
     // Loop through all schedules and check if date is within range
     for (const auto& s : schedules) {
 
-        if (s.date >= startDate && s.date <= endDate) {
+        if (s.date >= startDate && s.date <= endDate) {  
 
 
             Product* product = findProductById(s.productId);
@@ -256,146 +261,168 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
 
 }
 
-// save to files from vectors
+//// save to files from vectors
+//void ProcessPlanningSystem::saveData() {
+//
+//
+//    std::ofstream productFile("products.txt");
+//    std::ofstream scheduleFile("schedules.txt");
+//
+//
+//    //error in opening the file
+//    if (!productFile || !scheduleFile) {
+//        std::cout << "Error: Could not open file for saving.\n";
+//        return;
+//    }
+//
+//    // Save all products
+//    //array size products.size()
+//    productFile << products.size() << std::endl;
+//
+//
+//    for (const auto& p : products) {
+//        productFile << p.id << std::endl;
+//        productFile << p.name << std::endl;
+//        productFile << p.waterPerUnit << std::endl;
+//        productFile << p.electricityPerUnit << std::endl;
+//        productFile << p.machineTimePerUnit << std::endl;
+//        productFile << p.ingredients.size() << std::endl;
+//
+//        for (const auto& ing : p.ingredients) {
+//            productFile << ing.name << std::endl;
+//            productFile << ing.quantityPerUnit << std::endl;
+//        }
+//    }
+//
+//    // Save all schedules
+//    scheduleFile << schedules.size() << std::endl;
+//
+//    for (const auto& s : schedules) {
+//
+//        scheduleFile << s.productId << std::endl;
+//        scheduleFile << s.date << std::endl;
+//        scheduleFile << s.quantity << std::endl;
+//
+//
+//    }
+//
+//    std::cout << "Data saved to products.txt and schedules.txt\n";
+//}
+//
+//// load to vectors  from file
+//void ProcessPlanningSystem::loadData() {
+//
+//    std::ifstream productFile("products.txt");
+//    std::ifstream scheduleFile("schedules.txt");
+//
+//
+//    products.clear();
+//    schedules.clear();
+//
+//    // Load products
+//    if (productFile) {
+//
+//        int productCount;
+//        productFile >> productCount;
+//        productFile.ignore();
+//
+//        for (int i = 0; i < productCount; i++) {
+//
+//            Product p;
+//            int ingredientCount;
+//
+//            productFile >> p.id;
+//            productFile.ignore();
+//
+//            std::getline(productFile, p.name);
+//
+//            productFile >> p.waterPerUnit;
+//            productFile >> p.electricityPerUnit;
+//            productFile >> p.machineTimePerUnit;
+//            productFile >> ingredientCount;
+//
+//            productFile.ignore();
+//
+//            for (int j = 0; j < ingredientCount; j++) {
+//                std::string ingName;
+//                double qty;
+//
+//                std::getline(productFile, ingName);
+//
+//                productFile >> qty;
+//                productFile.ignore();
+//
+//                p.ingredients.push_back(Ingredient(ingName, qty));
+//            }
+//
+//            products.push_back(p);
+//        }
+//
+//
+//        std::cout << "Products loaded from file.\n";
+//    }
+//
+//
+//    else {
+//        std::cout << "No saved product data found.\n";
+//    }
+//
+//    // Load schedules
+//    if (scheduleFile) {
+//
+//
+//        int scheduleCount;
+//        scheduleFile >> scheduleCount;
+//        scheduleFile.ignore();
+//
+//        for (int i = 0; i < scheduleCount; i++) {
+//            ProductionSchedule s;
+//
+//            scheduleFile >> s.productId;
+//            scheduleFile.ignore();
+//            std::getline(scheduleFile, s.date);
+//            scheduleFile >> s.quantity;
+//            scheduleFile.ignore();
+//
+//            schedules.push_back(s);
+//
+//        }
+//
+//
+//        std::cout << "Schedules loaded from file.\n";
+//    }
+//
+//
+//    else {
+//
+//        std::cout << "No saved schedule data found.\n";
+//
+//    }
+//
+//
+//}
+
+
+// save to files from storage
 void ProcessPlanningSystem::saveData() {
 
+    bool productsSaved = FileHandler::saveProducts(products);
+    bool schedulesSaved = FileHandler::saveSchedules(schedules);
 
-    std::ofstream productFile("products.txt");
-    std::ofstream scheduleFile("schedules.txt");
-
-
-    //error in opening the file
-    if (!productFile || !scheduleFile) {
-        std::cout << "Error: Could not open file for saving.\n";
-        return;
+    if (productsSaved && schedulesSaved) {
+        std::cout << "Data saved to products.txt and schedules.txt\n";
     }
-
-    // Save all products
-    //array size products.size()
-    productFile << products.size() << std::endl;
-
-
-    for (const auto& p : products) {
-        productFile << p.id << std::endl;
-        productFile << p.name << std::endl;
-        productFile << p.waterPerUnit << std::endl;
-        productFile << p.electricityPerUnit << std::endl;
-        productFile << p.machineTimePerUnit << std::endl;
-        productFile << p.ingredients.size() << std::endl;
-
-        for (const auto& ing : p.ingredients) {
-            productFile << ing.name << std::endl;
-            productFile << ing.quantityPerUnit << std::endl;
-        }
-    }
-
-    // Save all schedules
-    scheduleFile << schedules.size() << std::endl;
-
-    for (const auto& s : schedules) {
-
-        scheduleFile << s.productId << std::endl;
-        scheduleFile << s.date << std::endl;
-        scheduleFile << s.quantity << std::endl;
-
-
-    }
-
-    std::cout << "Data saved to products.txt and schedules.txt\n";
 }
 
-// load to vectors  from file
+//load from files to storage
 void ProcessPlanningSystem::loadData() {
-
-    std::ifstream productFile("products.txt");
-    std::ifstream scheduleFile("schedules.txt");
-
-
     products.clear();
     schedules.clear();
 
-    // Load products
-    if (productFile) {
-
-        int productCount;
-        productFile >> productCount;
-        productFile.ignore();
-
-        for (int i = 0; i < productCount; i++) {
-
-            Product p;
-            int ingredientCount;
-
-            productFile >> p.id;
-            productFile.ignore();
-
-            std::getline(productFile, p.name);
-
-            productFile >> p.waterPerUnit;
-            productFile >> p.electricityPerUnit;
-            productFile >> p.machineTimePerUnit;
-            productFile >> ingredientCount;
-
-            productFile.ignore();
-
-            for (int j = 0; j < ingredientCount; j++) {
-                std::string ingName;
-                double qty;
-
-                std::getline(productFile, ingName);
-
-                productFile >> qty;
-                productFile.ignore();
-
-                p.ingredients.push_back(Ingredient(ingName, qty));
-            }
-
-            products.push_back(p);
-        }
-
-
-        std::cout << "Products loaded from file.\n";
-    }
-
-
-    else {
-        std::cout << "No saved product data found.\n";
-    }
-
-    // Load schedules
-    if (scheduleFile) {
-
-
-        int scheduleCount;
-        scheduleFile >> scheduleCount;
-        scheduleFile.ignore();
-
-        for (int i = 0; i < scheduleCount; i++) {
-            ProductionSchedule s;
-
-            scheduleFile >> s.productId;
-            scheduleFile.ignore();
-            std::getline(scheduleFile, s.date);
-            scheduleFile >> s.quantity;
-            scheduleFile.ignore();
-
-            schedules.push_back(s);
-
-        }
-
-
-        std::cout << "Schedules loaded from file.\n";
-    }
-
-
-    else {
-
-        std::cout << "No saved schedule data found.\n";
-
-    }
-
-
+    FileHandler::loadProducts(products);
+    FileHandler::loadSchedules(schedules);
 }
+
 
 // show all products
 void ProcessPlanningSystem::showProducts() {
