@@ -24,16 +24,18 @@ bool FileHandler::saveProducts(const std::vector<Product>& products) {
 
 
     for (const auto& p : products) {
-        productFile << p.id << std::endl;
-        productFile << p.name << std::endl;
-        productFile << p.waterPerUnit << std::endl;
-        productFile << p.electricityPerUnit << std::endl;
-        productFile << p.machineTimePerUnit << std::endl;
-        productFile << p.ingredients.size() << std::endl;
 
-        for (const auto& ing : p.ingredients) {
-            productFile << ing.name << std::endl;
-            productFile << ing.quantityPerUnit << std::endl;
+
+        productFile << p.getId() << std::endl;
+        productFile << p.getName() << std::endl;
+        productFile << p.getWaterPerUnit() << std::endl;
+        productFile << p.getElectricityPerUnit() << std::endl;
+        productFile << p.getMachineTimePerUnit() << std::endl;
+        productFile << p.getIngredients().size() << std::endl;
+
+        for (const auto& ing : p.getIngredients() ) {
+            productFile << ing.getName() << std::endl;
+            productFile << ing.getQuantityPerUnit() << std::endl;
         }
     }
 
@@ -66,9 +68,9 @@ bool FileHandler::saveSchedules(const std::vector<ProductionSchedule>& schedules
 
     for (const auto& s : schedules) {
 
-        scheduleFile << s.productId << std::endl;
-        scheduleFile << s.date << std::endl;
-        scheduleFile << s.quantity << std::endl;
+        scheduleFile << s.getProductId() << std::endl;
+        scheduleFile << s.getDate() << std::endl;
+        scheduleFile << s.getQuantity() << std::endl;
 
 
     }
@@ -101,21 +103,27 @@ bool FileHandler::loadProducts(std::vector<Product>& products) {
         for (int i = 0; i < productCount; i++) {
 
             Product p;
-            int ingredientCount;
+            int id, ingredientCount;
+            std::string name;
+            double water, electricity, machineTime;
 
-            productFile >> p.id;
+            productFile >> id;
             productFile.ignore();
-
-            std::getline(productFile, p.name);
-
-            productFile >> p.waterPerUnit;
-            productFile >> p.electricityPerUnit;
-            productFile >> p.machineTimePerUnit;
+            getline(productFile, name);
+            productFile >> water >> electricity >> machineTime;
             productFile >> ingredientCount;
-
             productFile.ignore();
+
+
+            p.setId(id);                          // setter
+            p.setName(name);                      // setter
+            p.setWaterPerUnit(water);             // setter
+            p.setElectricityPerUnit(electricity); // setter
+            p.setMachineTimePerUnit(machineTime); // setter
 
             for (int j = 0; j < ingredientCount; j++) {
+
+
                 std::string ingName;
                 double qty;
 
@@ -124,10 +132,14 @@ bool FileHandler::loadProducts(std::vector<Product>& products) {
                 productFile >> qty;
                 productFile.ignore();
 
-                p.ingredients.push_back(Ingredient(ingName, qty));
+                p.addIngredient(Ingredient(ingName, qty));
+
+
             }
 
             products.push_back(p);
+
+
         }
 
 
@@ -165,13 +177,27 @@ bool FileHandler::loadSchedules(std::vector<ProductionSchedule>& schedules) {
         scheduleFile.ignore();
 
         for (int i = 0; i < scheduleCount; i++) {
+
             ProductionSchedule s;
 
-            scheduleFile >> s.productId;
+
+            //copy from txt
+            int productId, quantity;
+            std::string date;
+
+            scheduleFile >> productId;
             scheduleFile.ignore();
-            std::getline(scheduleFile, s.date);
-            scheduleFile >> s.quantity;
+
+            getline(scheduleFile, date);
+            scheduleFile >> quantity;
             scheduleFile.ignore();
+
+
+
+            //set here
+            s.setProductId(productId);   
+            s.setDate(date);            
+            s.setQuantity(quantity);     
 
             schedules.push_back(s);
 

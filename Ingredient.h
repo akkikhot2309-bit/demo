@@ -4,12 +4,18 @@
 // This class stores one ingredient of a product
 
 class Ingredient {
+
+
+private:
+    // data members
+    std::string name;
+    double quantityPerUnit;
+
+
 public:
 
-    // data members
-    std::string name;          
-    double quantityPerUnit;    
-
+   
+   
     //  default constructor
     Ingredient();
 
@@ -18,6 +24,14 @@ public:
     Ingredient(std::string name, double quantityPerUnit);
 
 
+    // getters - get the values
+    std::string getName()   const;
+    double  getQuantityPerUnit() const;
+
+
+    //setters sets the values
+    void setName(std::string name);
+    void setQuantityPerUnit(double quantity);
 
 };
 

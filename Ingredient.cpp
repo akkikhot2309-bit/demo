@@ -15,3 +15,35 @@ Ingredient::Ingredient(std::string name, double quantityPerUnit) {
     this->quantityPerUnit = quantityPerUnit;
 
 }
+
+
+// Setters
+void Ingredient::setName(std::string name) { 
+    
+    this->name = name; 
+
+}
+
+void Ingredient::setQuantityPerUnit(double quantity) {
+
+    this->quantityPerUnit = quantity; 
+
+}
+
+
+//getters
+std::string Ingredient::getName() const {
+
+    return name;
+
+
+}
+
+double  Ingredient::getQuantityPerUnit() const { 
+
+    return quantityPerUnit; 
+
+}
+
+
+

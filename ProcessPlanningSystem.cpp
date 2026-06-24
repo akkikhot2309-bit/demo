@@ -16,16 +16,18 @@ Product* ProcessPlanningSystem::findProductById(int id) {
 
     for (auto& product : products) {
 
-        if (product.id == id) {
+        if (product.getId() == id) {
             return &product;
         }
     }
+
     return nullptr;
 }
 
 
 // add product
 void ProcessPlanningSystem::addProduct() {
+
     Product p;
     int ingredientCount;
 
@@ -36,28 +38,45 @@ void ProcessPlanningSystem::addProduct() {
 
     std::cout << "\n";
 
+    // validate ID
+    while (true) {
 
-    p.id = Validator::getValidInt("Enter Product ID (positive number): ");
+        int id = Validator::getValidInt("Enter Product ID (positive number): ");
 
-    std::cin.ignore();
+        if (id <= 0) {
 
-    // Check if ID already exists
-    if (findProductById(p.id) != nullptr) {
+            std::cout << "  Product ID must be greater than 0.\n";
+        }
 
-        std::cout << "Product ID already exists. Please use a different ID.\n";
-        return;
+        else if (findProductById(id) != nullptr) {
+
+           std::cout << "  Product ID " << id << " already exists. Use a different ID.\n";
+        }
+
+        else {
+
+            p.setId(id);                  // setter
+            break;
+        }
 
     }
 
-    p.name = Validator::getValidString("Enter Product Name: ");
 
-    p.waterPerUnit = Validator::getValidDouble("Enter Water required per unit (liters): ");
+    // setter for the products input
+     
+    p.setName(Validator::getValidString("Enter Product Name: "));     
+    
 
-    p.electricityPerUnit = Validator::getValidDouble("Enter Electricity required per unit (kWh): ");
+    p.setWaterPerUnit(Validator::getValidDouble("Enter Water per unit (liters): "));     
+     
 
-    p.machineTimePerUnit = Validator::getValidDouble("Enter Machine Time required per unit (hours): ");
+    p.setElectricityPerUnit(Validator::getValidDouble("Enter Electricity per unit (kWh): "));  
+
+    p.setMachineTimePerUnit(Validator::getValidDouble("Enter Machine Time per unit (hrs): "));  
 
 
+
+    //take valid inputs
     while (true) {
 
         ingredientCount = Validator::getValidInt("Enter number of ingredients (at least 1): ");
@@ -69,8 +88,12 @@ void ProcessPlanningSystem::addProduct() {
         else {
             break;
         }
+
+
     }
 
+
+    //add ingrediants one by one in ingrediants
     for (int i = 0; i < ingredientCount; i++) {
 
         
@@ -83,38 +106,73 @@ void ProcessPlanningSystem::addProduct() {
 
         std::cin.ignore();
 
-        p.ingredients.push_back(Ingredient(ingName, qty));
+        p.addIngredient(Ingredient(ingName, qty));
 
 
 
     }
 
     products.push_back(p);
-    std::cout << "Product added successfully!\n";
+    std::cout << "\nProduct \"" << p.getName() << "\" added successfully!\n";
+
+    saveData();
+
+
+
 
 
 
 }
 
-// addSchedule
+
+
+// addSchedule production schedules are here
 void ProcessPlanningSystem::addProductionSchedule() {
+
+
     ProductionSchedule s;
 
     std::cout << "\n--- Add Production Schedule ---\n";
 
-    s.productId = Validator::getValidInt("Enter Product ID: ");
+    //setters
+    // valid product id
+    while (true) {
 
-    // Check if product exists before adding schedule
-    Product* product = findProductById(s.productId);
+        int id = Validator::getValidInt("Enter Product ID: ");
 
-    if (product == nullptr) {
-        std::cout << "Product ID not found. Please add the product first.\n";
-        return;
+        if (findProductById(id) == nullptr){
+            std::cout << "  Product ID " << id << " not found. Add the product first.\n";
+        }
+
+
+        else {
+            s.setProductId(id);           // setter
+            break;
+        }
     }
 
-    s.date = Validator::getValidDate("Enter Production Date (YYYY-MM-DD): ");
 
-    s.quantity = Validator::getValidInt("Enter Quantity to produce: ");
+    // valid date
+    s.setDate(Validator::getValidDate("Enter Production Date (YYYY-MM-DD): "));
+
+
+    // valid quantity
+    while (true) {
+
+        int qty = Validator::getValidInt("Enter Quantity to produce: ");
+
+        if (qty <= 0) {
+
+            std::cout << "  Quantity must be greater than 0.\n";
+        }
+
+        else {
+
+            s.setQuantity(qty);           // setter
+            break;
+        }
+
+    }
 
     schedules.push_back(s);
 
@@ -122,6 +180,7 @@ void ProcessPlanningSystem::addProductionSchedule() {
 
     std::cout << "Production schedule added successfully!\n";
 
+    saveData();
 
 }
 
@@ -148,21 +207,22 @@ void ProcessPlanningSystem::createForecastReport() {
         << std::setw(16) << "Electricity(kWh)"
         << std::setw(16) << "MachTime(hrs)"
         << std::endl;
-    std::cout << std::string(88, '-') << std::endl;
+
+    std::cout << std::string(89, '-') << std::endl;
 
     for (const auto& s : schedules) {
 
 
-        Product* product = findProductById(s.productId);
+        Product* product = findProductById(s.getProductId());
 
 
         //product exists
         if (product != nullptr) {
 
-
-            double water = product->waterPerUnit * s.quantity;
-            double electricity = product->electricityPerUnit * s.quantity;
-            double machineTime = product->machineTimePerUnit * s.quantity;
+            // getters 
+            double water = product->getWaterPerUnit() * s.getQuantity();  
+            double electricity = product->getElectricityPerUnit() * s.getQuantity();
+            double machineTime = product->getMachineTimePerUnit() * s.getQuantity();
 
 
 
@@ -171,9 +231,9 @@ void ProcessPlanningSystem::createForecastReport() {
             totalMachineTime += machineTime;
 
             std::cout << std::left
-                << std::setw(14) << s.date
-                << std::setw(20) << product->name
-                << std::setw(10) << s.quantity
+                << std::setw(14) << s.getDate()
+                << std::setw(20) << product->getName()
+                << std::setw(10) << s.getQuantity()
                 << std::setw(12) << water
                 << std::setw(16) << electricity
                 << std::setw(16) << machineTime
@@ -193,7 +253,8 @@ void ProcessPlanningSystem::createForecastReport() {
 
 }
 
-//createIngrediant
+
+//createIngrediantReport-> Ingrediants required
 void ProcessPlanningSystem::createIngredientReportByDateRange() {
 
     if (schedules.empty()) {
@@ -215,29 +276,47 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
 
     endDate = Validator::getValidDate("Enter End Date   (YYYY-MM-DD): ");
 
+
+    // mistak in date intered
+    if (startDate > endDate) {
+        std::cout << "  Error: Start date cannot be after end date.\n";
+        return;
+    }
+
+
     // Loop through all schedules and check if date is within range
     for (const auto& s : schedules) {
 
-        if (s.date >= startDate && s.date <= endDate) {  
+        if (s.getDate() >= startDate && s.getDate() <= endDate) {
 
 
-            Product* product = findProductById(s.productId);
+            Product* product = findProductById(s.getProductId());
 
 
             //found product
             if (product != nullptr) {
+
                 // For each ingredient  product->ingredients , multiply per-unit qty by production quantity
 
-                for (const auto& ing : product->ingredients) {
-                    ingredientTotals[ing.name] += ing.quantityPerUnit * s.quantity;
+                for (const auto& ing : product->getIngredients()) {
+
+
+
+                    ingredientTotals[ing.getName()] += ing.getQuantityPerUnit() * s.getQuantity();
+
+
                 }
+
             }
 
 
         }
     }
 
+
     std::cout << "\n===== INGREDIENTS REQUIRED REPORT =====\n";
+
+
     std::cout << "Date Range: " << startDate << " to " << endDate << "\n";
     std::cout << std::string(40, '-') << std::endl;
 
@@ -438,18 +517,18 @@ void ProcessPlanningSystem::showProducts() {
     for (const auto& p : products) {
 
 
-        std::cout << "Product ID    : " << p.id << std::endl;
-        std::cout << "Product Name  : " << p.name << std::endl;
-        std::cout << "Water/unit    : " << p.waterPerUnit << " L\n";
-        std::cout << "Electricity/unit: " << p.electricityPerUnit << " kWh\n";
-        std::cout << "Machine Time/unit: " << p.machineTimePerUnit << " hrs\n";
+        std::cout << "Product ID    : " << p.getId() << std::endl;
+        std::cout << "Product Name  : " << p.getName() << std::endl;
+        std::cout << "Water/unit    : " << p.getWaterPerUnit() << " L\n";
+        std::cout << "Electricity/unit: " << p.getElectricityPerUnit() << " kWh\n";
+        std::cout << "Machine Time/unit: " << p.getMachineTimePerUnit() << " hrs\n";
         std::cout << "Ingredients:\n";
 
 
-        for (const auto& ing : p.ingredients) {
+        for (const auto& ing : p.getIngredients() ) {
 
 
-            std::cout << "   - " << ing.name << " : " << ing.quantityPerUnit << " per unit\n";
+            std::cout << "   - " << ing.getName() << " : " << ing.getQuantityPerUnit() << " per unit\n";
 
 
         }
@@ -475,12 +554,12 @@ void ProcessPlanningSystem::showSchedules() {
 
     for (const auto& s : schedules) {
 
-        Product* product = findProductById(s.productId);
+        Product* product = findProductById(s.getProductId());
 
-        std::cout << "Date: " << s.date
-            << " | Product ID: " << s.productId
-            << " | Product: " << (product ? product->name : "Unknown")
-            << " | Quantity: " << s.quantity
+        std::cout << "Date: " << s.getDate()
+            << " | Product ID: " << s.getProductId()
+            << " | Product: " << (product ? product->getName() : "Unknown")
+            << " | Quantity: " << s.getQuantity()
             << std::endl;
 
 
