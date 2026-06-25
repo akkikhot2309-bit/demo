@@ -2,65 +2,65 @@
 
 // default constructor 
 Product::Product() {
-    id = 0;
-    name = "";
-    waterPerUnit = 0;
-    electricityPerUnit = 0;
-    machineTimePerUnit = 0;
+    m_id = 0;
+    m_name = "";
+    m_waterPerUnit = 0;
+    m_electricityPerUnit = 0;
+    m_machineTimePerUnit = 0;
 }
 
 
 //getters 
 int  Product::getId()   const { 
-    return id; 
+    return m_id; 
 }
 std::string   Product::getName()    const { 
-    return name; 
+    return m_name; 
 }
 double   Product::getWaterPerUnit()   const {
-    return waterPerUnit;
+    return m_waterPerUnit;
 }
 double   Product::getElectricityPerUnit() const {
-    return electricityPerUnit;
+    return m_electricityPerUnit;
 }
 double    Product::getMachineTimePerUnit() const { 
-    return machineTimePerUnit; 
+    return m_machineTimePerUnit; 
 }
 const std::vector<Ingredient>& Product::getIngredients()       const { 
-    return ingredients;
+    return m_ingredients;
 }
 
 
 // Setters
 void Product::setId(int id) { 
 
-    this->id = id;
+    this->m_id = id;
 }
 
 void Product::setName(std::string name) {
 
-    this->name = name;
+    this->m_name = name;
 }
 
 void Product::setWaterPerUnit(double water) { 
 
-    this->waterPerUnit = water; 
+    this->m_waterPerUnit = water; 
 }
 
 void Product::setElectricityPerUnit(double elec) { 
 
-    this->electricityPerUnit = elec;
+    this->m_electricityPerUnit = elec;
 }
 
 void Product::setMachineTimePerUnit(double machine) {
 
-    this->machineTimePerUnit = machine;
+    this->m_machineTimePerUnit = machine;
 }
 
 
 // Add one ingredient to the list
 void Product::addIngredient(const Ingredient& ingredient) {
 
-    ingredients.push_back(ingredient);
+    m_ingredients.push_back(ingredient);
 
 }

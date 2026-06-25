@@ -8,8 +8,8 @@ class Ingredient {
 
 private:
     // data members
-    std::string name;
-    double quantityPerUnit;
+    std::string m_name;
+    double m_quantityPerUnit;
 
 
 public:

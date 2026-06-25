@@ -2,37 +2,37 @@
 
 // default constructor 
 ProductionSchedule::ProductionSchedule() {
-    productId = 0;
-    date = "";
-    quantity = 0;
+    m_productId = 0;
+    m_date = "";
+    m_quantity = 0;
 }
 
 // getters
 int   ProductionSchedule::getProductId() const {
 
-    return productId; 
+    return m_productId; 
 }
 std::string ProductionSchedule::getDate()  const { 
 
-    return date; 
+    return m_date; 
 }
 int     ProductionSchedule::getQuantity()  const { 
 
-    return quantity;
+    return m_quantity;
 }
 
 // setters
 void ProductionSchedule::setProductId(int id) {
 
-    this->productId = id; 
+    this->m_productId = id; 
 }
 void ProductionSchedule::setDate(std::string date) { 
 
-    this->date = date;
+    this->m_date = date;
 }
 void ProductionSchedule::setQuantity(int quantity) { 
 
-    this->quantity = quantity;
+    this->m_quantity = quantity;
 }
 
 

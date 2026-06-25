@@ -9,13 +9,13 @@ class Product {
 
 private:
 
-    int id;                         //unique id 
-    std::string name;                    // product name
-    std::vector<Ingredient> ingredients;  // ingrediants needed 
+    int m_id;                         //unique id 
+    std::string m_name;                    // product name
+    std::vector<Ingredient> m_ingredients;  // ingrediants needed 
 
-    double waterPerUnit;                 // liters of water per unit
-    double electricityPerUnit;           // kWh of electricity per unit
-    double machineTimePerUnit;           // hours of machine time per unit
+    double m_waterPerUnit;                 // liters of water per unit
+    double m_electricityPerUnit;           // kWh of electricity per unit
+    double m_machineTimePerUnit;           // hours of machine time per unit
 
 
 public:

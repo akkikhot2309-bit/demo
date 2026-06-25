@@ -17,12 +17,15 @@ int main() {
     do {
 
             std::cout << "\n====================================\n";
+            std::cout << "\n";
 
             std::cout << "   PROCESS PLANNING SYSTEM\n";
             std::cout << "   Chemical Plant Management\n";
 
-            std::cout << "\n\n\n";
 
+
+            std::cout << "\n\n\n";
+            std::cout << "\n====================================\n";
 
 
             std::cout << "1. Add Product\n";
@@ -34,6 +37,8 @@ int main() {
             std::cout << "7. Show All Products\n";
             std::cout << "8. Show All Schedules\n";
             std::cout << "0. Exit\n";
+            std::cout << "\n";
+
             std::cout << "------------------------------------\n";
              
 

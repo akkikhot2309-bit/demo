@@ -14,7 +14,7 @@
 Product* ProcessPlanningSystem::findProductById(int id) {
 
 
-    for (auto& product : products) {
+    for (auto& product : m_products) {
 
         if (product.getId() == id) {
             return &product;
@@ -112,7 +112,7 @@ void ProcessPlanningSystem::addProduct() {
 
     }
 
-    products.push_back(p);
+    m_products.push_back(p);
     std::cout << "\nProduct \"" << p.getName() << "\" added successfully!\n";
 
     saveData();
@@ -174,7 +174,7 @@ void ProcessPlanningSystem::addProductionSchedule() {
 
     }
 
-    schedules.push_back(s);
+    m_schedules.push_back(s);
 
 
 
@@ -188,7 +188,7 @@ void ProcessPlanningSystem::addProductionSchedule() {
 void ProcessPlanningSystem::createForecastReport() {
 
 
-    if (schedules.empty()) {
+    if (m_schedules.empty()) {
        std::cout << "\nNo production schedules available.\n";
         return;
     }
@@ -204,13 +204,13 @@ void ProcessPlanningSystem::createForecastReport() {
         << std::setw(20) << "Product"
         << std::setw(10) << "Qty"
         << std::setw(12) << "Water(L)"
-        << std::setw(16) << "Electricity(kWh)"
+        << std::setw(18) << "Electricity(kWh)"
         << std::setw(16) << "MachTime(hrs)"
         << std::endl;
 
-    std::cout << std::string(89, '-') << std::endl;
+    std::cout << std::string(88, '-') << std::endl;
 
-    for (const auto& s : schedules) {
+    for (const auto& s : m_schedules) {
 
 
         Product* product = findProductById(s.getProductId());
@@ -246,6 +246,7 @@ void ProcessPlanningSystem::createForecastReport() {
     std::cout << "TOTAL Electricity Required: " << totalElectricity << " kWh\n";
     std::cout << "TOTAL Machine Time        : " << totalMachineTime << " hrs\n";
 
+    std::cout << "\n";
 
     std::cout << "=====================================\n";
 
@@ -257,7 +258,7 @@ void ProcessPlanningSystem::createForecastReport() {
 //createIngrediantReport-> Ingrediants required
 void ProcessPlanningSystem::createIngredientReportByDateRange() {
 
-    if (schedules.empty()) {
+    if (m_schedules.empty()) {
 
         std::cout << "\nNo production schedules available.\n";
 
@@ -285,7 +286,7 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
 
 
     // Loop through all schedules and check if date is within range
-    for (const auto& s : schedules) {
+    for (const auto& s : m_schedules) {
 
         if (s.getDate() >= startDate && s.getDate() <= endDate) {
 
@@ -315,7 +316,7 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
 
 
     std::cout << "\n===== INGREDIENTS REQUIRED REPORT =====\n";
-
+    std::cout << "\n";
 
     std::cout << "Date Range: " << startDate << " to " << endDate << "\n";
     std::cout << std::string(40, '-') << std::endl;
@@ -334,9 +335,9 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
         std::cout << std::left << std::setw(20) << item.first << ": " << item.second << std::endl;
 
     }
-
+    std::cout << "\n";
     std::cout << "========================================\n";
-
+    std::cout << "\n";
 
 }
 
@@ -485,36 +486,40 @@ void ProcessPlanningSystem::createIngredientReportByDateRange() {
 // save to files from storage
 void ProcessPlanningSystem::saveData() {
 
-    bool productsSaved = FileHandler::saveProducts(products);
-    bool schedulesSaved = FileHandler::saveSchedules(schedules);
+    bool productsSaved = FileHandler::saveProducts(m_products);
+    bool schedulesSaved = FileHandler::saveSchedules(m_schedules);
 
-    if (productsSaved && schedulesSaved) {
-        std::cout << "Data saved to products.txt and schedules.txt\n";
+    if (productsSaved) {
+        std::cout << "Data saved to products.txt \n";
     }
+    if (schedulesSaved) {
+        std::cout << "Data saved to schedules.txt \n";
+    }
+
 }
 
 //load from files to storage
 void ProcessPlanningSystem::loadData() {
-    products.clear();
-    schedules.clear();
+    m_products.clear();
+    m_schedules.clear();
 
-    FileHandler::loadProducts(products);
-    FileHandler::loadSchedules(schedules);
+    FileHandler::loadProducts(m_products);
+    FileHandler::loadSchedules(m_schedules);
 }
 
 
 // show all products
 void ProcessPlanningSystem::showProducts() {
 
-    if (products.empty()) {
+    if (m_products.empty()) {
         std::cout << "\nNo products added yet.\n";
         return;
     }
 
     std::cout << "\n========== PRODUCT LIST ==========\n";
+    std::cout << "\n";
 
-
-    for (const auto& p : products) {
+    for (const auto& p : m_products) {
 
 
         std::cout << "Product ID    : " << p.getId() << std::endl;
@@ -534,7 +539,7 @@ void ProcessPlanningSystem::showProducts() {
         }
 
         std::cout << std::string(34, '-') << std::endl;
-
+        std::cout << "\n";
 
     }
 }
@@ -543,7 +548,7 @@ void ProcessPlanningSystem::showProducts() {
 void ProcessPlanningSystem::showSchedules() {
 
 
-    if (schedules.empty()) {
+    if (m_schedules.empty()) {
         std::cout << "\nNo schedules added yet.\n";
         return;
 
@@ -551,8 +556,8 @@ void ProcessPlanningSystem::showSchedules() {
     }
 
     std::cout << "\n========== PRODUCTION SCHEDULES ==========\n";
-
-    for (const auto& s : schedules) {
+    std::cout << "\n";
+    for (const auto& s : m_schedules) {
 
         Product* product = findProductById(s.getProductId());
 
@@ -564,7 +569,7 @@ void ProcessPlanningSystem::showSchedules() {
 
 
     }
-
+    std::cout << "\n";
     std::cout << "==========================================\n";
 
 

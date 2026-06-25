@@ -13,8 +13,8 @@
 
 class ProcessPlanningSystem {
 private:
-    std::vector<Product> products;               //for storing all products
-    std::vector<ProductionSchedule> schedules;  // for storing all the schedules
+    std::vector<Product> m_products;               //for storing all products
+    std::vector<ProductionSchedule> m_schedules;  // for storing all the schedules
 
 public:
 

@@ -8,9 +8,9 @@
 
 class ProductionSchedule {
 private:
-    int productId;    // which product to produce
-    std::string date; // yyyy-mm-dd 
-    int quantity;     // how many units to produce
+    int m_productId;    // which product to produce
+    std::string m_date; // yyyy-mm-dd 
+    int m_quantity;     // how many units to produce
 
 
 public:

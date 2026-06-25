@@ -2,8 +2,8 @@
 
 // default constructor
 Ingredient::Ingredient() {
-    name = "";
-    quantityPerUnit = 0;
+    m_name = "";
+    m_quantityPerUnit = 0;
 }
 
 // parameterized constructor
@@ -11,8 +11,8 @@ Ingredient::Ingredient(std::string name, double quantityPerUnit) {
 
 
     //this 
-    this->name = name;
-    this->quantityPerUnit = quantityPerUnit;
+    this->m_name = name;
+    this->m_quantityPerUnit = quantityPerUnit;
 
 }
 
@@ -20,13 +20,13 @@ Ingredient::Ingredient(std::string name, double quantityPerUnit) {
 // Setters
 void Ingredient::setName(std::string name) { 
     
-    this->name = name; 
+    this->m_name = name; 
 
 }
 
 void Ingredient::setQuantityPerUnit(double quantity) {
 
-    this->quantityPerUnit = quantity; 
+    this->m_quantityPerUnit = quantity; 
 
 }
 
@@ -34,14 +34,14 @@ void Ingredient::setQuantityPerUnit(double quantity) {
 //getters
 std::string Ingredient::getName() const {
 
-    return name;
+    return m_name;
 
 
 }
 
 double  Ingredient::getQuantityPerUnit() const { 
 
-    return quantityPerUnit; 
+    return m_quantityPerUnit; 
 
 }
 

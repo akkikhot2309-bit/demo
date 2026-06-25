@@ -1,4 +1,4 @@
-3
+6
 1
 Liquidsoap
 5
@@ -31,3 +31,27 @@ wheat
 5
 flavour
 10
+34
+Uria
+2
+1
+0.5
+1
+chemiacl 7
+45
+45
+oral-B
+0.5
+0.3
+0.5
+1
+neeam
+2
+30
+santoor
+2
+2
+3
+1
+sulfer
+0.2
